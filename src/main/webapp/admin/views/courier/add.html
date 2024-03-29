@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../../css/reset.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/add.css"/>
+	</head>
+	<body>
+		<div id="app">
+			<div class="header">
+				<span>添加快递员</span>
+			</div>
+			<div class="content">
+				<table>
+					<tr>
+						<td class="text-right">姓名</td><td class="content_right"><input class="input" id="name" placeholder="请输入姓名"></td>
+					</tr>
+					<tr>
+						<td class="text-right">手机号码</td><td class="content_right"><input class="input" id="phone" placeholder="请输入手机号码"></td>
+					</tr>
+					<tr>
+						<td class="text-right">身份证号码</td><td class="content_right"><input class="input" id="credit_number" placeholder="请输入身份证号码"></td>
+					</tr>
+					<tr>
+						<td></td><td class="content_right"><button id="submit">提交</button></td>
+					</tr>
+				</table>
+				
+				
+			</div>
+		</div>
+	</body>
+	<script src="/admin/js/jquery2.1.4.js"></script>
+	<script src="/admin/layer/layer.js"></script>
+	<script>
+		$(document).ready(function () {
+			$("#submit").click(
+					function (){
+						console.log("准备提交");
+						var window_id = layer.load();
+						var name = $("#name").val();
+						var phone = $("#phone").val();
+						var credit_number = $("#credit_number").val();
+						$.post(
+								"/admin/increase_courier.do",
+								{"name":name,"phone":phone,"credit_number":credit_number},
+								function (data){
+									layer.close(window_id);
+									alert(data.result);
+								}
+						)
+					}
+			)
+		})
+	</script>
+</html>

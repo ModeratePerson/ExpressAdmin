@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../../css/reset.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/add.css"/>
+	</head>
+	<body>
+		<div id="app">
+			<div class="header">
+				<span>删除快递信息</span>
+			</div>
+			<div class="content">
+				<table>	
+					<tr>
+						<td class="text-right">运单号</td><td class="content_right"><input class="input inline-input" placeholder="请输入运单号码" id="code"> <button id="find">查找</button></td>
+					</tr>
+				</table>
+			</div>
+			
+			
+			<div class="header">
+				<span>查找信息如下</span>
+			</div>
+			<div class="content">
+				<table>
+					<tr>
+						<td class="text-right">快递公司</td><td class="content_right"><input class="input" id="company" placeholder="请输入姓名"></td>
+					</tr>
+					<tr>
+						<td class="text-right">收货人姓名</td><td class="content_right"><input class="input"id="username" placeholder="请输入姓名"></td>
+					</tr>
+					<tr>
+						<td class="text-right">手机号码</td><td class="content_right"><input class="input" id="phonenumber" placeholder="请输入姓名"></td>
+					</tr>
+					<tr>
+						<td class="text-right">快递状态</td><td class="content_right"><input type="radio" name="status" id="signed" value="1">已签收  <input name="status" type="radio" id="unsigned" value="0">未签收</td>
+					</tr>
+					<tr>
+						<td></td><td class="content_right"><button id="delete">删除</button>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<script src="/admin/js/jquery2.1.4.js"></script>
+		<script src="/admin/layer/layer.js"></script>
+		<script>
+			$(
+					function (){
+						$("#find").click(
+								function (){
+									var window_id = layer.load();
+									var code = $("#code").val();
+									$.post(
+											"/admin/SelectById.do",
+											{"code":code},
+											function (data){
+												layer.close(window_id);
+												// layer.msg(data.result);
+												alert(data.result);
+												var company = data.data.company;
+												var username = data.data.name;
+												var status = data.data.status;
+												var phonenumber = data.data.phone;
+												$("#company").val(company);
+												$("#username").val(username);
+												$("#phonenumber").val(phonenumber);
+												if (status === "已取件") {
+													$("#signed").prop("checked", true);
+												} else if (status === "未取件") {
+													$("#unsigned").prop("checked", true);
+												}
+											}
+									)
+								}
+						)
+						$("#delete").click(
+								function (){
+									var window_id = layer.load();
+									var code = $("#code").val();
+									$.post(
+											"/admin/delete.do",
+											{"code":code},
+											function (data){
+												layer.close(window_id);
+												// layer.msg(data.result);
+												alert(data.result);
+											}
+									)
+								}
+						)
+					}
+			)
+		</script>
+	</body>
+</html>

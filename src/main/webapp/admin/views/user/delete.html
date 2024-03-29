@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../../../../css/reset.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/add.css"/>
+	</head>
+	<body>
+		<div id="app">
+			<div class="header">
+				<span>删除快递员</span>
+			</div>
+			<div class="content">
+				<table>	
+					<tr>
+						<td class="text-right">手机号码</td><td class="content_right"><input class="input inline-input" id="phone" placeholder="请输入手机号码"> <button id="find">查找</button></td>
+					</tr>
+				</table>
+			</div>
+			
+			
+			<div class="header">
+				<span>查找信息如下</span>
+			</div>
+			<div class="content">
+				<table>
+					<tr>
+						<td class="text-right">姓名</td><td class="content_right"><input class="input" id="name" placeholder="请输入姓名"></td>
+					</tr>
+					<tr>
+						<td></td><td class="content_right"><button id="delete">删除</button> </td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</body>
+	<script src="/admin/js/jquery2.1.4.js"></script>
+	<script src="/admin/layer/layer.js"></script>
+	<script>
+		$(
+				function (){
+					$("#find").click(
+							function (){
+								var window_id = layer.load();
+								var phone = $("#phone").val();
+								$.post(
+										"/admin/select_by_phone.do",
+										{"phone":phone},
+										function (data){
+											layer.close(window_id);
+											// layer.msg(data.result);
+											alert(data.result);
+											var name = data.data.name;
+											$("#name").val(name);
+										}
+								)
+							}
+					)
+					$("#delete").click(
+							function (){
+								var window_id = layer.load();
+								var phone = $("#phone").val();
+								$.post(
+										"/admin/delete_user.do",
+										{"phone":phone},
+										function (data){
+											layer.close(window_id);
+											// layer.msg(data.result);
+											alert(data.result);
+										}
+								)
+							}
+					)
+				}
+		)
+	</script>
+</html>

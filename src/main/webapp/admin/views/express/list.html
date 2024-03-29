@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="../../css/reset.css"/>
+	<link rel="stylesheet" type="text/css" href="../../css/list.css"/>
+	<link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.17.1/bootstrap-table.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="js/jquery2.1.4.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.17.1/bootstrap-table.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-table/1.17.1/locale/bootstrap-table-zh-CN.min.js"></script>
+</head>
+	<body>
+	<table id="list"></table>
+	<script>
+		$(function (){
+			$("#list").bootstrapTable({
+				url:"/admin/select.do",//数据地址
+				striped:true,//是否显示行间隔
+				pageNumber:1,//初始化加载第几页
+				pagination:true,//是否分页
+				sidePagination:"server",
+				pageSize:5,
+				pageList:[5,10,20],
+				showRefresh:true,
+				queryParams:function (params){
+					var temp = {
+						offset:params.offset,
+						pageNumber: params.limit
+					}
+					return temp;
+				},
+				responseHandler: function (res) {
+					return {
+						total: res.total, // 总条数
+						rows: res.list // 数据
+					};
+				},
+				columns:[
+					{
+						title:"编号",
+						field:"id",
+					},{
+						title:"快递编号",
+						field:"express_id",
+					},{
+						title:"快递公司",
+						field:"company",
+					},
+					{
+						title:"收件人姓名",
+						field:"name",
+					},
+					{
+						title: "收件人手机号",
+						field: "phone",
+					},
+					{
+						title:"取件状态",
+						field:"status",
+					}
+					,{
+						title:"取件码",
+						field:"code",
+					}
+					,{
+						title: "入库时间",
+						field: "in_time",
+					}
+					,{
+						title:"出库时间",
+						field:"time",
+					},
+					{
+						title: "快递员手机号",
+						field: "Courier_phone",
+					},
+				]
+			});
+		});
+		</script>
+	</body>
+</html>

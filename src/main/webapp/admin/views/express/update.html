@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../../css/reset.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/add.css"/>
+	</head>
+	<body>
+		<div id="app">
+			<div class="header">
+				<span>修改快递信息</span>
+			</div>
+			<div class="content">
+				<table>	
+					<tr>
+						<td class="text-right">运单号</td><td class="content_right"><input class="input inline-input" id="code" placeholder="请输入运单号码"> <button class="layui-btn layui-btn-blue" name="submit" id="find" lay-submit lay-filter="formDemo">查找</button></td>
+					</tr>
+				</table>
+			</div>
+			
+			
+			<div class="header">
+				<span>查找信息如下</span>
+			</div>
+			<div class="content">
+				<table>
+					<tr>
+						<td class="text-right">快递公司</td><td class="content_right"><input class="input" id="company" placeholder="请输入快递公司"></td>
+					</tr>
+					<tr>
+						<td class="text-right">收货人姓名</td><td class="content_right"><input class="input" id="username" placeholder="请输入姓名"></td>
+					</tr>
+					<tr>
+						<td class="text-right">手机号码</td><td class="content_right"><input class="input" id="phonenumber" placeholder="请输入手机号码"></td>
+					</tr>
+					<tr>
+						<td class="text-right">快递状态</td><td class="content_right"><input type="radio" name="status" id="signed" value="1">已签收  <input name="status" type="radio" id="unsigned" value="0">未签收</td>
+					</tr>
+					<tr>
+						<td></td><td class="content_right"><button class="layui-btn layui-btn-blue" id="update">修改</button>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<script src="../../assets/layui.all.js"></script>
+		<script>
+			var form = layui.form
+					,layer = layui.layer;
+		</script>
+		<script src="/admin/js/jquery2.1.4.js"></script>
+		<script src="/admin/layer/layer.js"></script>
+		<script>
+			$(document).ready(function () {
+				$("#find").click(
+						function (){
+							var window_id = layer.load();
+							var code = $("#code").val();
+							$.post(
+									"/admin/SelectById.do",
+									{"code":code},
+									function (data){
+										layer.close(window_id);
+										// layer.msg(data.result);
+										alert(data.result);
+										var company = data.data.company;
+										var username = data.data.name;
+										var status = data.data.status;
+										var phonenumber = data.data.phone;
+										$("#company").val(company);
+										$("#username").val(username);
+										$("#phonenumber").val(phonenumber);
+										if (status === "已取件") {
+											$("#signed").prop("checked", true);
+										} else if (status === "未取件") {
+											$("#unsigned").prop("checked", true);
+										}
+									}
+							)
+						}
+				)
+				$("#update").click(
+						function (){
+							console.log("准备提交");
+							var window_id = layer.load();
+							var code = $("#code").val();
+							var company = $("#company").val();
+							var username = $("#username").val();
+							var phonenumber = $("#phonenumber").val();
+							var status = $("input[name='status']:checked").val();
+							$.post(
+									"/admin/update.do",
+									{"code":code,"status":status,"company":company,"username":username,"phonenumber":phonenumber},
+									function (data){
+										layer.close(window_id);
+										// layer.msg(data.result);
+										alert(data.result);
+									}
+							)
+						}
+				)
+			})
+		</script>
+	</body>
+</html>
